@@ -1,10 +1,12 @@
 const API = "api/funcionarios/";
 
-const tbody = document.getElementById(
+const tbody =
+document.getElementById(
     "tbody-funcionarios"
 );
 
-const form = document.getElementById(
+const form =
+document.getElementById(
     "form-funcionario"
 );
 
@@ -12,67 +14,114 @@ let editando = null;
 
 async function carregarFuncionarios(){
 
-    const response = await fetch(
-        API + "listar.php"
-    );
+    try{
 
-    const funcionarios = await response.json();
+        const response =
+            await fetch(
+                API + "listar.php"
+            );
 
-    tbody.innerHTML = "";
+        const funcionarios =
+            await response.json();
 
-    funcionarios.forEach(funcionario => {
+        console.log(
+            "FUNCIONARIOS:",
+            funcionarios
+        );
 
-        tbody.innerHTML += `
+        tbody.innerHTML = "";
 
-            <tr>
+        if(!Array.isArray(funcionarios)){
 
-                <td>${funcionario.nome}</td>
+            alert(
+                funcionarios.message +
+                "\n" +
+                (funcionarios.erro || "")
+            );
 
-                <td>${funcionario.cargo}</td>
+            return;
+        }
 
-                <td>
-                    R$ ${parseFloat(
-                        funcionario.salario
-                    ).toFixed(2)}
-                </td>
+        funcionarios.forEach(
+            funcionario => {
 
-                <td>${funcionario.email}</td>
+                tbody.innerHTML += `
 
-                <td>${funcionario.horario_entrada || "-"}</td>
+                    <tr>
 
-                <td>${funcionario.horario_saida || "-"}</td>
+                        <td>
+                            ${funcionario.nome}
+                        </td>
 
-                <td>
+                        <td>
+                            ${funcionario.cargo}
+                        </td>
 
-                    <button
-                        class="btn-editar"
-                        onclick="editarFuncionario(
-                            ${funcionario.id},
-                            '${funcionario.nome}',
-                            '${funcionario.cargo}',
-                            '${funcionario.salario}',
-                            '${funcionario.email}',
-                            '${funcionario.horario_entrada}',
-                            '${funcionario.horario_saida}'
-                        )"
-                    >
-                        Editar
-                    </button>
+                        <td>
+                            R$
+                            ${parseFloat(
+                                funcionario.salario
+                            ).toFixed(2)}
+                        </td>
 
-                    <button
-                        class="btn-excluir"
-                        onclick="deletarFuncionario(${funcionario.id})"
-                    >
-                        Excluir
-                    </button>
+                        <td>
+                            ${funcionario.email}
+                        </td>
 
-                </td>
+                        <td>
+                            ${
+                                funcionario.horario_entrada
+                                || "-"
+                            }
+                        </td>
 
-            </tr>
+                        <td>
+                            ${
+                                funcionario.horario_saida
+                                || "-"
+                            }
+                        </td>
 
-        `;
+                        <td>
 
-    });
+                            <button
+                                class="btn-editar"
+                                onclick='editarFuncionario(
+                                    ${JSON.stringify(funcionario)}
+                                )'
+                            >
+                                Editar
+                            </button>
+
+                            <button
+                                class="btn-excluir"
+                                onclick="
+                                    deletarFuncionario(
+                                        ${funcionario.id}
+                                    )
+                                "
+                            >
+                                Excluir
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        );
+
+    }catch(error){
+
+        console.log(error);
+
+        alert(
+            "Erro ao carregar funcionários"
+        );
+
+    }
 
 }
 
@@ -85,129 +134,234 @@ form.addEventListener(
         const funcionario = {
 
             nome:
-                document.getElementById("nome").value,
+                document.getElementById(
+                    "nome"
+                ).value,
 
             cargo:
-                document.getElementById("cargo").value,
+                document.getElementById(
+                    "cargo"
+                ).value,
 
             salario:
-                document.getElementById("salario").value,
+                document.getElementById(
+                    "salario"
+                ).value,
 
             email:
-                document.getElementById("email").value,
+                document.getElementById(
+                    "email"
+                ).value,
 
             horario_entrada:
-                document.getElementById("horario_entrada").value,
+                document.getElementById(
+                    "horario_entrada"
+                ).value,
 
             horario_saida:
-                document.getElementById("horario_saida").value
+                document.getElementById(
+                    "horario_saida"
+                ).value
 
         };
 
         if(editando){
 
-            funcionario.id = editando;
-
-            await fetch(
-                API + "editar.php",
-                {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                        "application/json"
-                    },
-
-                    body: JSON.stringify(funcionario)
-
-                }
-            );
-
-            editando = null;
-
-        }else{
-
-            await fetch(
-                API + "criar.php",
-                {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                        "application/json"
-                    },
-
-                    body: JSON.stringify(funcionario)
-
-                }
-            );
+            funcionario.id =
+                editando;
 
         }
 
-        form.reset();
+        const endpoint =
+            editando
+            ? "editar.php"
+            : "criar.php";
 
-        carregarFuncionarios();
+        try{
+
+            const response =
+                await fetch(
+
+                    API + endpoint,
+
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                            "application/json"
+
+                        },
+
+                        body: JSON.stringify(
+                            funcionario
+                        )
+
+                    }
+
+                );
+
+            const data =
+                await response.json();
+
+            console.log(
+                "RESPOSTA API:",
+                data
+            );
+
+            if(!data.success){
+
+                alert(
+
+                    data.message +
+                    "\n" +
+                    (data.erro || "")
+
+                );
+
+                return;
+            }
+
+            alert(
+                data.message
+                ||
+                "Funcionário salvo com sucesso"
+            );
+
+            form.reset();
+
+            editando = null;
+
+            carregarFuncionarios();
+
+        }catch(error){
+
+            console.log(error);
+
+            alert(
+                "Erro ao conectar com a API"
+            );
+
+        }
 
     }
 );
 
 function editarFuncionario(
-    id,
-    nome,
-    cargo,
-    salario,
-    email,
-    horarioEntrada,
-    horarioSaida
+    funcionario
 ){
 
-    editando = id;
+    editando =
+        funcionario.id;
 
-    document.getElementById("nome").value =
-        nome;
+    document.getElementById(
+        "nome"
+    ).value =
+        funcionario.nome;
 
-    document.getElementById("cargo").value =
-        cargo;
+    document.getElementById(
+        "cargo"
+    ).value =
+        funcionario.cargo;
 
-    document.getElementById("salario").value =
-        salario;
+    document.getElementById(
+        "salario"
+    ).value =
+        funcionario.salario;
 
-    document.getElementById("email").value =
-        email;
+    document.getElementById(
+        "email"
+    ).value =
+        funcionario.email;
 
     document.getElementById(
         "horario_entrada"
-    ).value = horarioEntrada;
+    ).value =
+        funcionario.horario_entrada
+        || "";
 
     document.getElementById(
         "horario_saida"
-    ).value = horarioSaida;
+    ).value =
+        funcionario.horario_saida
+        || "";
 
 }
 
-async function deletarFuncionario(id){
+async function deletarFuncionario(
+    id
+){
 
-    await fetch(
-        API + "deletar.php",
-        {
+    if(
+        !confirm(
+            "Deseja excluir este funcionário?"
+        )
+    ){
+        return;
+    }
 
-            method: "POST",
+    try{
 
-            headers: {
-                "Content-Type":
-                "application/json"
-            },
+        const response =
+            await fetch(
 
-            body: JSON.stringify({
-                id
-            })
+                API + "deletar.php",
 
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                        "application/json"
+
+                    },
+
+                    body: JSON.stringify({
+
+                        id: id
+
+                    })
+
+                }
+
+            );
+
+        const data =
+            await response.json();
+
+        console.log(
+            "DELETE:",
+            data
+        );
+
+        if(!data.success){
+
+            alert(
+
+                data.message +
+                "\n" +
+                (data.erro || "")
+
+            );
+
+            return;
         }
-    );
 
-    carregarFuncionarios();
+        carregarFuncionarios();
+
+    }catch(error){
+
+        console.log(error);
+
+        alert(
+            "Erro ao excluir funcionário"
+        );
+
+    }
 
 }
 

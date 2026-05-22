@@ -165,3 +165,223 @@ button{
     border-radius: 12px;
 
 }
+.campo-observacao{
+
+    width: 100%;
+
+    min-height: 70px;
+
+    resize: vertical;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 10px;
+
+    padding: 10px;
+
+    font-size: 14px;
+
+    font-family: Arial, sans-serif;
+
+    background: #f9fafb;
+
+    transition: 0.2s;
+
+    outline: none;
+
+    box-sizing: border-box;
+
+}
+
+.campo-observacao:focus{
+
+    border-color: #2563eb;
+
+    background: #fff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(37,99,235,0.15);
+
+}
+
+.campo-observacao:disabled{
+
+    background: #ececec;
+
+    cursor: not-allowed;
+
+}
+
+.card-funcionario {
+    background: #1f2937;
+    border-radius: 22px;
+    padding: 28px;
+    margin-top: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+.card-funcionario h2 {
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+.card-funcionario p {
+    margin: 4px 0;
+    color: #e5e7eb;
+}
+
+.tabela-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 24px;
+    border-radius: 18px;
+    background: #111827;
+    padding: 12px;
+}
+
+.tabela-ponto {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.tabela-ponto thead th {
+    color: #cbd5e1;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 12px;
+    text-align: center;
+}
+
+.tabela-ponto tbody tr {
+    background: #263244;
+    transition: 0.2s;
+}
+
+.tabela-ponto tbody tr:hover {
+    background: #2f3d52;
+}
+
+.tabela-ponto td {
+    padding: 14px 12px;
+    color: #f8fafc;
+    text-align: center;
+    vertical-align: middle;
+    border: none;
+}
+
+.tabela-ponto td:first-child {
+    border-radius: 14px 0 0 14px;
+    font-weight: 700;
+    min-width: 110px;
+}
+
+.tabela-ponto td:last-child {
+    border-radius: 0 14px 14px 0;
+}
+
+.tabela-ponto input[type="time"] {
+    background: #334155;
+    color: #ffffff;
+    border: 1px solid #475569;
+    border-radius: 12px;
+    padding: 10px;
+    min-width: 105px;
+    outline: none;
+}
+
+.tabela-ponto input[type="time"]:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+}
+
+.tabela-ponto input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+}
+
+.campo-observacao {
+    width: 230px;
+    min-height: 48px;
+    resize: vertical;
+    border: 1px solid #475569;
+    border-radius: 12px;
+    padding: 10px;
+    font-size: 13px;
+    font-family: Arial, sans-serif;
+    background: #334155;
+    color: #ffffff;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.campo-observacao::placeholder {
+    color: #94a3b8;
+}
+
+.campo-observacao:focus {
+    border-color: #3b82f6;
+    background: #3b4658;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.14);
+}
+
+.dia-nao-util {
+    text-align: center !important;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: #475569 !important;
+}
+
+.linha-fim-semana,
+.linha-feriado {
+    background: #e5e7eb !important;
+}
+
+.linha-fim-semana td,
+.linha-feriado td {
+    color: #475569 !important;
+}
+
+.linha-atraso {
+    background: #fef3c7 !important;
+}
+
+.linha-atraso td {
+    color: #78350f !important;
+}
+
+.linha-falta {
+    background: #fee2e2 !important;
+}
+
+.linha-falta td {
+    color: #7f1d1d !important;
+}
+
+.linha-atestado {
+    background: #dcfce7 !important;
+}
+
+.linha-atestado td {
+    color: #14532d !important;
+}
+
+.btn-salvar-mes {
+    margin-top: 18px;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 14px;
+    background: #2563eb;
+    color: #ffffff;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.btn-salvar-mes:hover {
+    background: #1d4ed8;
+}
+

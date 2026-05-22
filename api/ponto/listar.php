@@ -2,46 +2,39 @@
 
 include("../config/database.php");
 
-$mes = $_GET['mes'] ?? '';
+$mes = $_GET["mes"] ?? "";
 
-$sql = "
+$sql = "SELECT * FROM Ponto";
 
-SELECT
-
-    p.*,
-    f.nome,
-    f.cargo,
-    f.salario,
-    f.horario_entrada AS horario_padrao_entrada,
-    f.horario_saida AS horario_padrao_saida
-
-FROM ponto p
-
-INNER JOIN funcionarios f
-ON p.funcionario_id = f.id
-
-";
-
-if($mes != ''){
-
-    $sql .= "
-    WHERE MONTH(p.data_ponto) = '$mes'
-    ";
-
+if ($mes !== "") {
+    $sql .= " WHERE MONTH(data_ponto) = ?";
 }
 
-$sql .= "
-ORDER BY p.data_ponto ASC
-";
+$sql .= " ORDER BY data_ponto ASC";
 
-$result = $conn->query($sql);
+$stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Erro no SQL",
+        "erro" => $conn->error
+    ]);
+    exit;
+}
+
+if ($mes !== "") {
+    $stmt->bind_param("i", $mes);
+}
+
+$stmt->execute();
+
+$result = $stmt->get_result();
 
 $pontos = [];
 
-while($row = $result->fetch_assoc()){
-
+while ($row = $result->fetch_assoc()) {
     $pontos[] = $row;
-
 }
 
 echo json_encode($pontos);

@@ -327,10 +327,10 @@ form.addEventListener(
             dados.funcionario_id
         );
 
-        const endpoint =
-        existe
-        ? "editar.php"
-        : "criar.php";
+            const endpoint =
+            existe
+            ? "editar.php"
+            : "salvar.php";
 
         await fetch(
 

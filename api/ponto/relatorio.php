@@ -2,37 +2,41 @@
 
 include("../config/database.php");
 
-$funcionario =
-$_GET['funcionario_id'];
+$funcionario_id = $_GET["funcionario_id"] ?? 0;
 
 $sql = "
-
 SELECT
-
     p.*,
     f.nome,
     f.cargo,
     f.salario
-
 FROM ponto p
-
-INNER JOIN funcionarios f
+INNER JOIN Funcionarios f
 ON p.funcionario_id = f.id
-
-WHERE funcionario_id = '$funcionario'
-
-ORDER BY data_ponto ASC
-
+WHERE p.funcionario_id = ?
+ORDER BY p.data_ponto ASC
 ";
 
-$result = $conn->query($sql);
+$stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Erro no SQL do relatório",
+        "erro" => $conn->error
+    ]);
+    exit;
+}
+
+$stmt->bind_param("i", $funcionario_id);
+$stmt->execute();
+
+$result = $stmt->get_result();
 
 $dados = [];
 
-while($row = $result->fetch_assoc()){
-
+while ($row = $result->fetch_assoc()) {
     $dados[] = $row;
-
 }
 
 echo json_encode($dados);

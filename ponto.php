@@ -1,5 +1,12 @@
 <?php
+
 session_start();
+
+if (!isset($_SESSION["usuario"])) {
+    header("Location: login.php");
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -8,88 +15,91 @@ session_start();
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <title>Ponto - Portal RH</title>
 
-    <title>
-        Controle de Ponto
-    </title>
-
-    <link rel="stylesheet" href="css/global.css">
-    <link
-        rel="stylesheet"
-        href="css/ponto.css"
-    >
+    <link rel="stylesheet" href="css/ponto.css">
 
 </head>
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <div class="topo">
+<div class="topo-pagina">
 
-            <h1>
-                Controle de Ponto
-            </h1>
+    <h1>Controle de Ponto</h1>
 
-            <div class="acoes-topo">
+    <button
+        class="btn-voltar-dashboard"
+        onclick="window.location.href='dashboard.php'"
+    >
+        Página inicial
+    </button>
 
-                <a
-                    href="dashboard.php"
-                    class="btn-home"
+</div>
+
+    <div id="lista-funcionarios"></div>
+
+</div>
+
+<script>
+
+async function carregarFuncionarios(){
+
+    const response =
+        await fetch(
+            "api/funcionarios/listar.php"
+        );
+
+    const funcionarios =
+        await response.json();
+
+    const lista =
+        document.getElementById(
+            "lista-funcionarios"
+        );
+
+    lista.innerHTML = "";
+
+    funcionarios.forEach(funcionario => {
+
+        lista.innerHTML += `
+
+            <div class="card-funcionario">
+
+                <h2>
+                    ${funcionario.nome}
+                </h2>
+
+                <p>
+                    Cargo:
+                    ${funcionario.cargo}
+                </p>
+
+                <p>
+                    Salário:
+                    R$ ${funcionario.salario}
+                </p>
+
+                <button
+                    onclick="
+                        window.location.href =
+                        'ponto_funcionario.php?id=${funcionario.id}'
+                    "
                 >
-                    Página Inicial
-                </a>
-
-                <a
-                    href="php/logout.php"
-                    class="btn-logout"
-                >
-                    Logout
-                </a>
+                    Abrir ponto
+                </button>
 
             </div>
 
-        </div>
+        `;
 
-        <div class="mes-box">
+    });
 
-            <label>
-                Selecione o mês:
-            </label>
+}
 
-            <select id="mes">
+carregarFuncionarios();
 
-                <option value="1">Janeiro</option>
-                <option value="2">Fevereiro</option>
-                <option value="3">Março</option>
-                <option value="4">Abril</option>
-                <option value="5">Maio</option>
-                <option value="6">Junho</option>
-                <option value="7">Julho</option>
-                <option value="8">Agosto</option>
-                <option value="9">Setembro</option>
-                <option value="10">Outubro</option>
-                <option value="11">Novembro</option>
-                <option value="12">Dezembro</option>
-
-            </select>
-
-            <button id="btn-carregar">
-                Carregar
-            </button>
-
-        </div>
-
-        <div id="conteudo-ponto">
-
-        </div>
-
-    </div>
-
-    <script src="js/ponto.js"></script>
+</script>
 
 </body>
 </html>

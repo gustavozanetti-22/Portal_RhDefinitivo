@@ -9,7 +9,7 @@ $data = json_decode(
 
 $stmt = $conn->prepare(
 
-    "INSERT INTO ferias (
+    "INSERT INTO Ferias (
 
         funcionario_id,
         ultima_feria,

@@ -4,71 +4,96 @@ session_start();
 
 include("../config/database.php");
 
+header("Content-Type: application/json");
+
 $data = json_decode(
-
     file_get_contents("php://input"),
-
     true
-
 );
 
-$email = $data['email'];
+if (!$data) {
 
-$senha = $data['senha'];
+    echo json_encode([
+        "success" => false,
+        "message" => "Nenhum dado recebido"
+    ]);
+
+    exit;
+}
+
+$email = trim($data["email"] ?? "");
+$senha = trim($data["senha"] ?? "");
+
+if ($email === "" || $senha === "") {
+
+    echo json_encode([
+        "success" => false,
+        "message" => "Email ou senha vazios"
+    ]);
+
+    exit;
+}
 
 $stmt = $conn->prepare(
-
-    "SELECT * FROM usuarios
-    WHERE email = ?"
-
+    "SELECT * FROM Usuarios WHERE email = ?"
 );
 
-$stmt->bind_param(
+if (!$stmt) {
 
-    "s",
+    echo json_encode([
+        "success" => false,
+        "message" => "Erro no prepare SQL",
+        "erro" => $conn->error
+    ]);
 
-    $email
+    exit;
+}
 
-);
+$stmt->bind_param("s", $email);
 
 $stmt->execute();
 
-$result = $stmt->get_result();
+$resultado = $stmt->get_result();
 
-if($result->num_rows > 0){
+if ($resultado->num_rows === 0) {
 
-    $usuario =
-        $result->fetch_assoc();
+    echo json_encode([
+        "success" => false,
+        "message" => "Usuário não encontrado"
+    ]);
 
-    if($senha === $usuario['senha']){
+    exit;
+}
 
-        $_SESSION['usuario'] =
-            $usuario['id'];
+$usuario = $resultado->fetch_assoc();
 
-        echo json_encode([
+$senhaBanco = trim($usuario["senha"]);
 
-            "success" => true
-
-        ]);
-
-    }else{
-
-        echo json_encode([
-
-            "success" => false
-
-        ]);
-
-    }
-
-}else{
+if ($senha !== $senhaBanco) {
 
     echo json_encode([
 
-        "success" => false
+        "success" => false,
+
+        "message" => "Senha incorreta",
+
+        "digitada" => $senha,
+
+        "banco" => $senhaBanco
 
     ]);
 
+    exit;
 }
+
+$_SESSION["usuario"] = $usuario["id"];
+
+echo json_encode([
+
+    "success" => true,
+
+    "message" => "Login realizado com sucesso"
+
+]);
 
 ?>

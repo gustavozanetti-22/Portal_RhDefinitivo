@@ -2,7 +2,7 @@
 
 include("../config/database.php");
 
-$sql = "SELECT * FROM beneficios";
+$sql = "SELECT * FROM Beneficio";
 
 $result = $conn->query($sql);
 

@@ -9,7 +9,7 @@ $data = json_decode(
 
 $stmt = $conn->prepare(
 
-    "INSERT INTO beneficios (
+    "INSERT INTO Beneficio (
 
         funcionario_id,
         convenio_ativo,

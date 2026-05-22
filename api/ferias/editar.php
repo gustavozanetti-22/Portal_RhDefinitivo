@@ -9,7 +9,7 @@ $data = json_decode(
 
 $stmt = $conn->prepare(
 
-    "UPDATE ferias
+    "UPDATE Ferias
 
     SET
 
