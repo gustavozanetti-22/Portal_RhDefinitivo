@@ -40,8 +40,7 @@
 
             <h2>
 
-                Plataforma inteligente de gestão
-                de recursos humanos para empresas.
+                Plataforma inteligente para o seu RH.
 
             </h2>
 
@@ -61,7 +60,7 @@
 
                 <div class="info">
 
-                    Controle de ponto automatizado
+                    Controle de ponto
 
                 </div>
 
@@ -92,7 +91,7 @@
                     <p>
 
                         Acesse a plataforma corporativa
-                        MacosRH Enterprise.
+                        MacosRH.
 
                     </p>
 
@@ -107,7 +106,7 @@
 
                     <div class="bottom-text">
 
-                        MacosRH Enterprise © 2026
+                        MacosRH © 2026
 
                     </div>
 
