@@ -385,3 +385,56 @@ button{
     background: #1d4ed8;
 }
 
+.card-resumo-ponto {
+    display: grid;
+    grid-template-columns: 1fr 2fr auto;
+    gap: 24px;
+    align-items: center;
+}
+
+.resumo-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(120px, 1fr));
+    gap: 12px;
+}
+
+.resumo-item {
+    background: #273449;
+    padding: 14px;
+    border-radius: 14px;
+    text-align: center;
+}
+
+.resumo-item span {
+    display: block;
+    color: #cbd5e1;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.resumo-item strong {
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.resumo-item.desconto {
+    background: #3b1f24;
+}
+
+.resumo-item.extra {
+    background: #173524;
+}
+
+.resumo-item.total {
+    background: #1e3a8a;
+}
+
+@media (max-width: 1000px) {
+    .card-resumo-ponto {
+        grid-template-columns: 1fr;
+    }
+
+    .resumo-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

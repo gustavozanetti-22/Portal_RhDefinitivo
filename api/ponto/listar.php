@@ -3,11 +3,23 @@
 include("../config/database.php");
 
 $mes = $_GET["mes"] ?? "";
+$ano = $_GET["ano"] ?? "";
 
-$sql = "SELECT * FROM Ponto";
+$sql = "SELECT * FROM Ponto WHERE 1=1";
+
+$params = [];
+$types = "";
 
 if ($mes !== "") {
-    $sql .= " WHERE MONTH(data_ponto) = ?";
+    $sql .= " AND MONTH(data_ponto) = ?";
+    $params[] = $mes;
+    $types .= "i";
+}
+
+if ($ano !== "") {
+    $sql .= " AND YEAR(data_ponto) = ?";
+    $params[] = $ano;
+    $types .= "i";
 }
 
 $sql .= " ORDER BY data_ponto ASC";
@@ -23,8 +35,8 @@ if (!$stmt) {
     exit;
 }
 
-if ($mes !== "") {
-    $stmt->bind_param("i", $mes);
+if (count($params) > 0) {
+    $stmt->bind_param($types, ...$params);
 }
 
 $stmt->execute();
